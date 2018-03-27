@@ -1,3 +1,9 @@
+# IDEA stuff
+.idea
+
+# test files
+*obligplots.py
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

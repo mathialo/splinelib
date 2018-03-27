@@ -62,7 +62,27 @@ class SplineSpace(object):
 		return self.evaluate_basis(x)
 
 
-	# Exercise 2.17
+	def __eq__(self, other) -> bool:
+		"""
+		Checks wether two spaces are equal or not. Two spline spaces are equal 
+		if they have the same knot vector, and the same degree. 
+
+		Input:
+			other (SplineSpace): Space to compare to
+
+		Returns:
+			True if spaces are equal, False if not
+
+		Raises:
+			TypeError:			If other is not a SplineSpace
+		"""
+
+		if not isinstance(other, SplineSpace):
+			raise TypeError("Cannot compare SplineSpace to %s" % str(type(other)))
+
+		return self._degree == other._degree and (self._knots == other._knots).all()
+
+
 	def find_knot_index(self, x: float) -> int:
 		"""
 		Given a knot vector and a real number x with x in [t_1, t_{n+d+1} ), 
@@ -94,7 +114,6 @@ class SplineSpace(object):
 		return np.argmax(self._knots > x) - 1
 
 
-	# Algorithm 2.17
 	def evaluate_basis(self, x: float) -> np.ndarray:
 		"""
 		Evaluates all the active basis splines on x
@@ -206,7 +225,67 @@ class Spline(object):
 		return self.evaluate(x)
 
 
-	# Algorithm 2.16
+	def __add__(self, other):
+		"""
+		Add self to another spline. Ie, if p1 is added to p2, the sum, p3, is 
+		defined as:
+
+			p3(x) = p1(x) + p2(x)
+
+		for all possible x. 
+
+		Input:
+			other (Spline):		Spline to add
+
+		Returns:
+			A new spline representing the sum of this spline and the other.
+
+		Raises:
+			TypeError:			If other is not a spline in the same space.
+		"""
+
+		if not isinstance(other, Spline):
+			raise TypeError("Cannot add Spline to %s" % str(type(other)))
+
+		if not other._space == self._space:
+			raise TypeError("Both splines must be from the same spline space")
+
+		return Spline(self._space, self._coeffs + other._coeffs)
+
+
+	def __eq__(self, other):
+		"""
+		Checks if two splines are equal. Two splines p1 and p2 are equal iff
+
+			p1(x) = p2(x)
+
+		for all possible x. 
+
+		Input:
+			other (Spline):		Spline to compare to self
+
+		Returns:
+			True if spaces are equal, False if not.
+
+		Raises:
+			TypeError:			If other is not a Spline.
+		"""
+
+		if not isinstance(other, Spline):
+			raise TypeError("Cannot compare Spline to %s" % str(type(other)))
+
+		return self._space == other._space and (self._coeffs == other._coeffs).all()
+
+
+	def get_control_polygon(self):
+		ts = np.zeros_like(self._coeffs);
+
+		for j in range(len(self._coeffs)):
+			ts[j] = np.sum(self._space._knots[j+1:j+self._space._degree+1]) / self._space._degree
+
+		return ts, self._coeffs.copy()
+		
+
 	def evaluate(self, x: float) -> float:
 		"""
 		Evaluate a spline in the given point.
