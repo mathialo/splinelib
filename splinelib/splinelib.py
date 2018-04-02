@@ -32,7 +32,7 @@ class SplineSpace(object):
 			raise TypeError("degree must be an integer")
 
 		# Store attributes
-		self._knots = knots
+		self._knots = knots.astype(np.float64)
 		self._degree = degree
 
 
@@ -204,7 +204,7 @@ class Spline(object):
 
 		# Store attributes
 		self._space = space
-		self._coeffs = coeffs
+		self._coeffs = coeffs.astype(np.float64)
 
 
 	def __call__(self, x: float) -> float:
@@ -284,9 +284,96 @@ class Spline(object):
 			ts[j] = np.sum(self._space._knots[j+1:j+self._space._degree+1]) / self._space._degree
 
 		return ts, self._coeffs.copy()
-		
 
-	def evaluate(self, x: float) -> float:
+
+	def _oslo(self, new_knots: np.ndarray, index: int):
+		# Find knot interval
+		mu = self._space.find_knot_index(new_knots[index])
+
+		# Create some shortcuts because the below expression for c[i] would be
+		# crazy ugly otherwise. 
+		d = self._space._degree
+		t = self._space._knots
+
+		# Initialize c vector. Deep copy, so we don't overwrite the
+		# coefficients. Ensure float types to avoid integer computations.
+		c = self._coeffs[mu-d:mu+1].copy().astype(np.float64)
+
+		for k in range(d, 0, -1):
+			for j in range(mu, mu-k, -1):
+				# Shift index for indexing in array
+				i = j-mu+d
+
+				# Compute next iteration of c_index
+				c[i] = (new_knots[index+k] - t[j]) / (t[j+k] - t[j]) * c[i] + (t[j+k] - new_knots[index+k]) / (t[j+k] - t[j]) * c[i-1]
+			
+
+		return c[-1]
+
+
+	def insert_knots(self, new_knots: np.ndarray):
+		# Create new space object
+		new_space = SplineSpace(new_knots, self._space._degree)
+
+		# Initilalize new coeff vector
+		additional_knots = len(new_knots) - len(self._space._knots)
+		new_coeffs = np.zeros(len(self._coeffs) + additional_knots, dtype=np.float64)
+
+		# Populate new coeff vector
+		for i in range(len(new_coeffs)):
+			new_coeffs[i] = self._oslo(new_knots, i);
+
+		# Update spline
+		self._space = new_space
+		self._coeffs = new_coeffs
+
+
+	def evaluate(self, x):
+		"""
+		Evaluate a spline in the (given) point(s).
+
+		Input:
+			x:					Point to evaluate spline in. If x is a float,
+								it will be evaluated in the single point. If it
+								is an array-like object, it will be evaulated in
+								every point.
+
+		Returns:
+			The value of the spline in the given point
+
+		Raises:
+			ValueError:			If x is outside the knot vector range
+			TypeError:			If any arg is of the wrong type
+		"""
+		if isinstance(x, (float, int)):
+			return self._evaluate(x)
+
+		elif isinstance(x, (np.ndarray, list, tuple)):
+			results = np.zeros_like(x)
+
+			for i in range(len(results)):
+				results[i] = self._evaluate(x[i])
+
+			return results
+
+		else:
+			raise TypeError("Cannot evaluate type " + type(x))
+
+
+	def evaluate_all(self):
+		"""
+		Evaluate a spline on entire knot vector
+
+		Returns:
+			A tuple of np.ndarrays with arguments and values.
+		"""
+		xs = np.linspace(self._space._knots[0], self._space._knots[-1], 100, endpoint=False)
+		ps = self.evaluate(xs)
+
+		return xs, ps
+
+
+	def _evaluate(self, x: float) -> float:
 		"""
 		Evaluate a spline in the given point.
 
