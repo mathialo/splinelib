@@ -16,14 +16,9 @@ class SplineSpace(object):
             knots (np.ndarray):	Knot vector
             degree (int):		Degree of the spline
 
-        Returns:
-            A spline object
-
         Raises:
             TypeError:			If any arg is of the wrong type
         """
-
-        super(SplineSpace, self).__init__()
 
         # Check types
         if not isinstance(knots, (np.ndarray)):
@@ -53,7 +48,7 @@ class SplineSpace(object):
             x (float):			Point to evaluate in
 
         Returns:
-            The value of all active B-splines
+            np.ndarray: The value of all active B-splines
 
         Raises:
             ValueError:			If x is outside the knot vector range
@@ -125,7 +120,7 @@ class SplineSpace(object):
             x (float):			Point to evaluate in
 
         Returns:
-            The value of all active B-splines
+            np.ndarray: The value of all active B-splines
 
         Raises:
             ValueError:			If x is outside the knot vector range
@@ -186,9 +181,6 @@ class Spline(object):
         Args:
             space (SplineSpace): Space to create a spline within
             coeffs (np.ndarray): Coefficient vector for the spline
-
-        Returns:
-            A Spline object, representing a spline inside the space
 
         Raises:
             ValueError:			If the number of coefficients doesn't match
@@ -422,6 +414,41 @@ class Spline(object):
                        + (t[j + k] - x) / (t[j + k] - t[j]) * c[i - 1]
 
         return c[-1]
+
+
+class Curve:
+    """
+    Class for representing a spline curve where each dimension is a spline function.
+    """
+
+
+    def __init__(self, dimensions):
+        """
+        Creates a curve in two dimensions from two splines, one for each driection
+
+        Args:
+            dimensions (Spline list):     A list of Spline objects representing movement
+                                          in each direction.
+        """
+        self.dimensions = dimensions
+
+
+    def __call__(self, u):
+        """
+        Compute x and y values for the curve
+
+        Args:
+            u (np.ndarray): Parametrization
+
+        Returns:
+            np.ndarray: Coordinates for curve, (n, D) shape.
+        """
+        coordinates = np.zeros([len(u), len(self.dimensions)])
+
+        for dim in range(len(self.dimensions)):
+            coordinates[:,dim] = self.dimensions[dim](u)
+
+        return coordinates
 
 
 ### TEST FUNCTIONS:
