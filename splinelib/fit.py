@@ -36,6 +36,7 @@ def least_squares(data, knots, degree, weights=None):
     A = np.zeros([m, n], dtype=np.float64)
     for i in range(m):
         mu = space.find_knot_index(data[i, 0])
+
         A[i, mu - degree:mu + 1] = np.sqrt(weights[i]) * space(data[i, 0])
 
     # Mask out zero columns so we avoid a singular matrix in the normal equations
@@ -45,7 +46,14 @@ def least_squares(data, knots, degree, weights=None):
     b = np.sqrt(weights) * data[:, 1]
 
     # Solve normal equations
-    c = np.linalg.solve(A.T @ A, A.T @ b)
+    try:
+        c = np.linalg.solve(A.T @ A, A.T @ b)
+        error = False
+    except np.linalg.LinAlgError:
+        error = True
+
+    if error:
+        raise np.linalg.LinAlgError("No solution to normal equations")
 
     # Pad with zeros in c corresponding to where we removed columns from A
     c_new = np.zeros_like(non_zero_cols, dtype=np.float64)
@@ -150,18 +158,21 @@ def fit_curve(data, knots, degree, method=least_squares, parametrization=cord_le
     return space.create_spline(coeffs)
 
 
-def generate_uniform_knots(data, degree, step_size=1):
+def generate_uniform_knots(data, degree, step_size=1, regular=True):
     """
-    Generates a d+1-regular knot vector for the data, with knots uniformly distributed.
+    Generates a d+1-extended knot vector for the data, with knots uniformly distributed.
 
     Args:
-        data:           Data to fit knots from (parametrization). Used to find min and max
-                        value needed.
-        degree:         Degree of spline to fit on knot vector.
-        step_size:      Optional. Step size between entries in the knot vector. Default is 1.
+        data (np.ndarray):  Data to fit knots from (parametrization). Used to find min and
+                            max value needed.
+        degree (int):       Degree of spline to fit on knot vector.
+        step_size (int):    Optional. Step size between entries in the knot vector.
+                            Default is 1.
+        regular (bool):     Optional. Make vector d+1-regular in addition to d+1-extended.
+                            Default is True
 
     Returns:
-
+        np.ndarray: A knot vector for the data with knots uniformly distributed.
     """
     # Find min and max, and store something slightly less/bigger
     minval = np.floor(np.min(data) * 10) / 10
@@ -171,10 +182,12 @@ def generate_uniform_knots(data, degree, step_size=1):
     inner_knots = np.arange(minval + 1, maxval, step_size)
 
     # Pad with d+1 entries of min/maxval at the ends to make the knot d+1-regular
-    knots = np.zeros(2 * (degree + 1) + len(inner_knots))
-    knots[0:degree + 1] = (degree + 1) * [minval]
-    knots[degree + 1:len(inner_knots) + degree + 1] = inner_knots
-    knots[len(inner_knots) + degree + 1:] = (degree + 1) * [maxval]
+    if regular:
+        knots = np.zeros(2 * (degree + 1) + len(inner_knots))
+        knots[0:degree + 1] = (degree + 1) * [minval]
+        knots[degree + 1:len(inner_knots) + degree + 1] = inner_knots
+        knots[len(inner_knots) + degree + 1:] = (degree + 1) * [maxval]
+    else:
+        knots = np.hstack([np.array([minval]), inner_knots, np.array([maxval])])
 
     return knots
-
