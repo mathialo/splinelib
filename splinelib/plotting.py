@@ -1,6 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from splinelib import *
+from .splinelib import *
 
 
 def add_spline_to_plot(spline, include_control_polygon=True, include_knots=True):
@@ -8,9 +8,11 @@ def add_spline_to_plot(spline, include_control_polygon=True, include_knots=True)
     Adds given spline to current matplotlib plot
 
     Args:
-        spline (Spline):                 spline to add
-        include_control_polygon (bool)   whether to include control polygon in plot or not
-        include_knots (bool)             whether to include knots in plot or not
+        spline (Spline):                 Spline to add
+        include_control_polygon (bool)   Optional. Whether to include control polygon in
+                                         plot or not. Default is True.
+        include_knots (bool)             Optional. Whether to include knots in plot or not.
+                                         Default is True
 
     Returns:
         None

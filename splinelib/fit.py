@@ -1,5 +1,5 @@
 import numpy as np
-from splinelib import *
+from .splinelib import *
 
 
 def least_squares(data, knots, degree, weights=None):
@@ -157,7 +157,7 @@ def generate_uniform_knots(data, degree, step_size=1):
         data:           Data to fit knots from (parametrization). Used to find min and max
                         value needed.
         degree:         Degree of spline to fit on knot vector.
-        step_size:      Step size between entries in the knot vector
+        step_size:      Optional. Step size between entries in the knot vector. Default is 1.
 
     Returns:
 
