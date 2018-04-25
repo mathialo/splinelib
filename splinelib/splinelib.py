@@ -188,10 +188,8 @@ class Spline(object):
             TypeError:			If any arg is of the wrong type
         """
 
-        super(Spline, self).__init__()
-
         # Check types
-        if not len(coeffs) == len(space):
+        if not coeffs.T.shape[0] == len(space):
             raise ValueError(
                 "Number of coeffs for a spline in a space of degree %d with %d knots must be %d!" % (
                     space._degree, len(space._knots), len(space)))
@@ -204,7 +202,11 @@ class Spline(object):
 
         # Store attributes
         self._space = space
-        self._coeffs = coeffs.astype(np.float64)
+
+        if coeffs.ndim == 1:
+            self._coeffs = coeffs.astype(np.float64).reshape([1, len(coeffs)])
+        else:
+            self._coeffs = coeffs.astype(np.float64)
 
 
     def __call__(self, x):
@@ -278,17 +280,48 @@ class Spline(object):
                 self._coeffs == other._coeffs).all()
 
 
+    def is_curve(self):
+        """
+        Returns True if this object represents a curve, False if it represents a function.
+
+        Returns:
+            bool: Whether the Spline object represents a curve or a function
+        """
+        return self._coeffs.shape[0] != 1
+
+
     def get_control_polygon(self):
-        ts = np.zeros_like(self._coeffs);
+        """
+        Get points for the control polygon of the spline. This will only work for functions
+        or 2D curves.
 
-        for j in range(len(self._coeffs)):
-            ts[j] = np.sum(self._space._knots[j + 1:j + self._space._degree + 1]) \
-                    / self._space._degree
+        Returns:
+            (np.ndarray, np.ndarray): x and y coordinates for control polygon
+        """
+        if not self.is_curve():
+            ts = np.zeros_like(self._coeffs);
 
-        return ts, self._coeffs.copy()
+            for j in range(len(self._coeffs)):
+                ts[j] = np.sum(self._space._knots[j + 1:j + self._space._degree + 1]) \
+                        / self._space._degree
+
+            return ts, self._coeffs.copy()
+
+        else:
+            return self._coeffs[0, :].copy(), self._coeffs[1, :].copy()
 
 
     def _oslo(self, new_knots, index):
+        """
+        Implementation of the Oslo algorithm for knot insertion
+
+        Args:
+            new_knots:      new knot vector, containing the old as a subset
+            index:          index to work at
+
+        Returns:
+            new coefficient value for the knot at given index
+        """
         # Find knot interval1
         mu = self._space.find_knot_index(new_knots[index])
 
@@ -299,7 +332,7 @@ class Spline(object):
 
         # Initialize c vector. Deep copy, so we don't overwrite the
         # coefficients. Ensure float types to avoid integer computations.
-        c = self._coeffs[mu - d:mu + 1].copy().astype(np.float64)
+        c = self._coeffs[:, mu - d:mu + 1].copy().astype(np.float64)
 
         for k in range(d, 0, -1):
             for j in range(mu, mu - k, -1):
@@ -307,13 +340,23 @@ class Spline(object):
                 i = j - mu + d
 
                 # Compute next iteration of c_index
-                c[i] = (new_knots[index + k] - t[j]) / (t[j + k] - t[j]) * c[i] \
-                       + (t[j + k] - new_knots[index + k]) / (t[j + k] - t[j]) * c[i - 1]
+                c[:, i] = (new_knots[index + k] - t[j]) / (t[j + k] - t[j]) * c[:, i] \
+                          + (t[j + k] - new_knots[index + k]) / (t[j + k] - t[j]) * c[:,
+                                                                                    i - 1]
 
-        return c[-1]
+        return c[:, -1]
 
 
     def insert_knots(self, new_knots):
+        """
+        Replace knot vector and recompute coefficients to fit these new knots.
+
+        Args:
+            new_knots:      New knot vector containing the old as a subset
+
+        Returns:
+            None
+        """
         # Create new space object
         new_space = SplineSpace(new_knots, self._space._degree)
 
@@ -342,7 +385,7 @@ class Spline(object):
                                 every point.
 
         Returns:
-            The value of the spline in the given point
+            float or np.ndarray: The value of the spline in the given point
 
         Raises:
             ValueError:			If x is outside the knot vector range
@@ -352,10 +395,10 @@ class Spline(object):
             return self._inner_evaluate(x)
 
         elif isinstance(x, (np.ndarray, list, tuple)):
-            results = np.zeros_like(x)
+            results = np.zeros([self._coeffs.shape[0], len(x)])
 
-            for i in range(len(results)):
-                results[i] = self._inner_evaluate(x[i])
+            for i in range(results.shape[1]):
+                results[:, i] = self._inner_evaluate(x[i])
 
             return results
 
@@ -370,11 +413,16 @@ class Spline(object):
         Returns:
             A tuple of np.ndarrays with arguments and values.
         """
-        xs = np.linspace(self._space._knots[0], self._space._knots[-1], 100,
+        xs = np.linspace(self._space._knots[0],
+                         self._space._knots[-1],
+                         100,
                          endpoint=False)
         ps = self.evaluate(xs)
 
-        return xs, ps
+        if not self.is_curve():
+            return xs, ps[0, :]
+        else:
+            return ps
 
 
     def _inner_evaluate(self, x):
@@ -402,7 +450,7 @@ class Spline(object):
 
         # Initialize c vector. Deep copy, so we don't overwrite the
         # coefficients. Ensure float types to avoid integer computations.
-        c = self._coeffs[mu - d:mu + 1].copy().astype(np.float64)
+        c = self._coeffs[:, mu - d:mu + 1].copy().astype(np.float64)
 
         for k in range(d, 0, -1):
             for j in range(mu, mu - k, -1):
@@ -410,45 +458,10 @@ class Spline(object):
                 i = j - mu + d
 
                 # Compute next iteration of c_index
-                c[i] = (x - t[j]) / (t[j + k] - t[j]) * c[i] \
-                       + (t[j + k] - x) / (t[j + k] - t[j]) * c[i - 1]
+                c[:, i] = (x - t[j]) / (t[j + k] - t[j]) * c[:, i] \
+                          + (t[j + k] - x) / (t[j + k] - t[j]) * c[:, i - 1]
 
-        return c[-1]
-
-
-class Curve:
-    """
-    Class for representing a spline curve where each dimension is a spline function.
-    """
-
-
-    def __init__(self, dimensions):
-        """
-        Creates a curve in two dimensions from two splines, one for each driection
-
-        Args:
-            dimensions (Spline list):     A list of Spline objects representing movement
-                                          in each direction.
-        """
-        self.dimensions = dimensions
-
-
-    def __call__(self, u):
-        """
-        Compute x and y values for the curve
-
-        Args:
-            u (np.ndarray): Parametrization
-
-        Returns:
-            np.ndarray: Coordinates for curve, (n, D) shape.
-        """
-        coordinates = np.zeros([len(u), len(self.dimensions)])
-
-        for dim in range(len(self.dimensions)):
-            coordinates[:,dim] = self.dimensions[dim](u)
-
-        return coordinates
+        return c[:, -1]
 
 
 ### TEST FUNCTIONS:
