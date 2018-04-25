@@ -3,19 +3,23 @@ import matplotlib.pyplot as plt
 from splinelib import *
 
 
-def add_spline_to_plot(spline):
+def add_spline_to_plot(spline, include_control_polygon=True, include_knots=True):
     """
     Adds given spline to current matplotlib plot
 
     Args:
-        spline (Spline):    spline to add
+        spline (Spline):                 spline to add
+        include_control_polygon (bool)   whether to include control polygon in plot or not
+        include_knots (bool)             whether to include knots in plot or not
 
     Returns:
         None
     """
     xs, ps = spline.evaluate_all()
     plt.plot(xs, ps)
-    plt.plot(*spline.get_control_polygon())
+
+    if include_control_polygon:
+        plt.plot(*spline.get_control_polygon())
 
     min_val = np.min(ps)
     dist = np.max(ps) - min_val
@@ -31,13 +35,13 @@ def add_spline_to_plot(spline):
         else:
             return abs(d1 - d2) < tol
 
+    if not spline.is_curve() and include_knots:
+        for knot in spline._space._knots:
+            if double_equals(knot, previous_knot):
+                similar_knots += 1
+            else:
+                similar_knots = 0
 
-    for knot in spline._space._knots:
-        if double_equals(knot, previous_knot):
-            similar_knots += 1
-        else:
-            similar_knots = 0
+            plt.scatter(knot, steps[similar_knots], color="k", s=10)
 
-        plt.scatter(knot, steps[similar_knots], color="k", s=10)
-
-        previous_knot = knot
+            previous_knot = knot
