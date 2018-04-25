@@ -1,3 +1,4 @@
 from .splinelib import *
-import plotting
-import fit
+import splinelib.fit
+import splinelib.plotting
+
