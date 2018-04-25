@@ -1,3 +1,3 @@
 from .splinelib import *
-from .plotting import *
+import plotting
 import fit

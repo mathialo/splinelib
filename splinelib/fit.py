@@ -1,18 +1,16 @@
 import numpy as np
-import matplotlib.pyplot as plt
 from splinelib import *
-from plotting import *
 
 
-def least_squares(knots, degree, data, weights=None):
+def least_squares(data, knots, degree, weights=None):
     """
     Fit a spline to the data using least squares optimization
 
     Args:
-        knots (np.ndarray):     Knot vector to fit spline onto
-        degree (int):           Desired degree of spline
         data (np.ndarray):      Data to fit from, with dimensions (m, 2). First column is
                                 x direction, and second column is y direction.
+        knots (np.ndarray):     Knot vector to fit spline onto
+        degree (int):           Desired degree of spline
         weights (np.ndarray):   Optional. Associated weights to data, assumed to all be
                                 equal to 1 if omitted. Must be of the same dimensions as
                                 data.
@@ -40,55 +38,142 @@ def least_squares(knots, degree, data, weights=None):
         mu = space.find_knot_index(data[i, 0])
         A[i, mu - degree:mu + 1] = np.sqrt(weights[i]) * space(data[i, 0])
 
+    # Mask out zero columns so we avoid a singular matrix in the normal equations
+    non_zero_cols = np.sum(A, axis=0) > 0.001
+    A = A[:, non_zero_cols]
+
     b = np.sqrt(weights) * data[:, 1]
 
-    # Solve normal equations and return spline using these coeffs
-    return space.create_spline(np.linalg.solve(A.T @ A, A.T @ b))
+    # Solve normal equations
+    c = np.linalg.solve(A.T @ A, A.T @ b)
+
+    # Pad with zeros in c corresponding to where we removed columns from A
+    c_new = np.zeros_like(non_zero_cols, dtype=np.float64)
+    i = 0
+    for j in range(len(non_zero_cols)):
+        if non_zero_cols[j]:
+            c_new[j] = c[i]
+            i += 1
+
+    # Return spline using these coeffs
+    return space.create_spline(c_new)
 
 
 def uniform(data):
-    return np.arange(0, data.shape[0])
+    """
+    Returns a column vector with parametrization for the data using the uniform
+    parametrization scheme.
+
+    Args:
+        data (np.ndarray):         Points to parametrize
+
+    Returns:
+        np.ndarray: Uniform parametrization of the data
+    """
+    return np.arange(0, data.shape[0]).reshape([data.shape[0], 1])
 
 
 def cord_length(data):
+    """
+    Returns a column vector with parametrization for the data using the cord length
+    parametrization scheme.
+
+    Args:
+        data (np.ndarray):         Points to parametrize
+
+    Returns:
+        np.ndarray: Cord length parametrization of the data
+    """
     u = np.zeros(data.shape[0])
-    for i in range(1, len(u())):
+
+    for i in range(1, len(u)):
         u[i] = u[i - 1] + np.linalg.norm(data[i, :] - data[i - 1, :], ord=2)
-    return u
+
+    return u.reshape([len(u), 1])
 
 
 def centripetal(data):
+    """
+    Returns a column vector with parametrization for the data using the centripetal
+    parametrization scheme.
+
+    Args:
+        data (np.ndarray):         Points to parametrize
+
+    Returns:
+        np.ndarray: Centripetal parametrization of the data
+    """
     u = np.zeros(data.shape[0])
-    for i in range(1, len(u())):
+
+    for i in range(1, len(u)):
         u[i] = u[i - 1] + np.sqrt(np.linalg.norm(data[i, :] - data[i - 1, :], ord=2))
-    return u
+
+    return u.reshape([len(u), 1])
 
 
-def fit_curve(data, degree, knots, method=least_squares):
+def fit_curve(data, knots, degree, method=least_squares, parametrization=cord_length):
     """
     Fits a curve of arbitrary dimension D from m given data points
 
     Args:
-        data (np.ndarray):              Data to fit curve from. A (m, D) matrix.
-        degree (int):                   Degree of desired spline
+        data (np.ndarray):              Data to fit curve from. A (m, D+1) matrix. First
+                                        column is the parametrization,
         knots (np.ndarray):             Knot vector
+        degree (int):                   Degree of desired spline
         method (callable):              Optional. Method for approximation. Available
                                         options are splinelib.fit.least_squares.
+        parametrization (callable):     Optional. Method for parametrization. Available
+                                        options are
+                                            - splinelib.fit.uniform
+                                            - splinelib.fit.cord_length
+                                            - splinelib.fit.centripetal
+                                        Default is cord_length.
 
     Returns:
         Curve: A spline curve fitted to the data.
     """
-    pass
+    D = data.shape[1]
+    coeffs = np.zeros([D, len(knots) - degree - 1])
+
+    # Generate parametrization and augment data
+    par = parametrization(data)
+    data = np.hstack([par, data])
+
+    # Approximate coeffs in each dimension
+    for dimension in range(D):
+        subset = np.vstack([data[:, 0], data[:, dimension + 1]]).T
+        coeffs[dimension, :] = method(subset, knots, degree)._coeffs
+
+    # Create spline and return
+    space = SplineSpace(knots, degree)
+    return space.create_spline(coeffs)
 
 
+def generate_uniform_knots(data, degree, step_size=1):
+    """
+    Generates a d+1-regular knot vector for the data, with knots uniformly distributed.
 
-def _test_fit():
-    data = np.loadtxt("hj1.dat")
+    Args:
+        data:           Data to fit knots from (parametrization). Used to find min and max
+                        value needed.
+        degree:         Degree of spline to fit on knot vector.
+        step_size:      Step size between entries in the knot vector
 
-    print(data[:,0:2])
+    Returns:
 
-    curve = fit_curve(data, 3, )
+    """
+    # Find min and max, and store something slightly less/bigger
+    minval = np.floor(np.min(data) * 10) / 10
+    maxval = np.ceil(np.max(data) * 10) / 10
 
+    # Create inner knots, each with a multiplicity of 1
+    inner_knots = np.arange(minval + 1, maxval, step_size)
 
-if __name__ == "__main__":
-    _test_fit()
+    # Pad with d+1 entries of min/maxval at the ends to make the knot d+1-regular
+    knots = np.zeros(2 * (degree + 1) + len(inner_knots))
+    knots[0:degree + 1] = (degree + 1) * [minval]
+    knots[degree + 1:len(inner_knots) + degree + 1] = inner_knots
+    knots[len(inner_knots) + degree + 1:] = (degree + 1) * [maxval]
+
+    return knots
+
