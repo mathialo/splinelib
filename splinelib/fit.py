@@ -121,7 +121,8 @@ def fit_curve(data, knots, degree, method=least_squares, parametrization=cord_le
         knots (np.ndarray):             Knot vector
         degree (int):                   Degree of desired spline
         method (callable):              Optional. Method for approximation. Available
-                                        options are splinelib.fit.least_squares.
+                                        options are
+                                            - splinelib.fit.least_squares.
         parametrization (callable):     Optional. Method for parametrization. Available
                                         options are
                                             - splinelib.fit.uniform
@@ -142,7 +143,7 @@ def fit_curve(data, knots, degree, method=least_squares, parametrization=cord_le
     # Approximate coeffs in each dimension
     for dimension in range(D):
         subset = np.vstack([data[:, 0], data[:, dimension + 1]]).T
-        coeffs[dimension, :] = method(subset, knots, degree)._coeffs
+        coeffs[dimension, :] = method(subset, knots, degree).get_coeffs()
 
     # Create spline and return
     space = SplineSpace(knots, degree)

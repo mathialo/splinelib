@@ -280,6 +280,17 @@ class Spline(object):
                 self._coeffs == other._coeffs).all()
 
 
+    def get_coeffs(self):
+        """
+        Returns a copy of the coefficients to the spline that can safely be edited without
+        accidentally modifying the spline.
+
+        Returns:
+            np.ndarray: coefficients of spline
+        """
+        return self._coeffs.copy()
+
+
     def is_curve(self):
         """
         Returns True if this object represents a curve, False if it represents a function.
