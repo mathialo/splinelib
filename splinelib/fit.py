@@ -130,7 +130,7 @@ def fit_curve(data, knots, degree, method=least_squares, parametrization=cord_le
                                         Default is cord_length.
 
     Returns:
-        Curve: A spline curve fitted to the data.
+        Spline: A spline curve fitted to the data.
     """
     D = data.shape[1]
     coeffs = np.zeros([D, len(knots) - degree - 1])
