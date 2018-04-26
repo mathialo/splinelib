@@ -148,6 +148,27 @@ class SplineSpace(object):
         return b
 
 
+    def get_knots(self):
+        """
+        Returns a copy of the knot vector for the space that can safely be edited without
+        accidentally modifying the space.
+
+        Returns:
+            np.ndarray: knot vector for space
+        """
+        return self._knots.copy()
+
+
+    def get_degree(self):
+        """
+        Returns the degree of the space
+
+        Returns:
+            int: degree of spline
+        """
+        return self._degree
+
+
     def create_spline(self, coeffs):
         """
         Creates a spline within this spline space with given coefficients
@@ -289,6 +310,27 @@ class Spline(object):
             np.ndarray: coefficients of spline
         """
         return self._coeffs.copy()
+
+
+    def get_knots(self):
+        """
+        Returns a copy of the knot vector for the spline that can safely be edited without
+        accidentally modifying the spline.
+
+        Returns:
+            np.ndarray: knot vector for spline
+        """
+        return self._space.get_knots()
+
+
+    def get_degree(self):
+        """
+        Returns the degree of the spline
+
+        Returns:
+            int: degree of spline
+        """
+        return self._space.get_degree()
 
 
     def is_curve(self):
@@ -473,6 +515,23 @@ class Spline(object):
                           + (t[j + k] - x) / (t[j + k] - t[j]) * c[:, i - 1]
 
         return c[:, -1]
+
+
+class TensorProductSplineSpace(object):
+
+    def __init__(self, spaces):
+        self._spaces = spaces
+
+
+    def create_spline(self, coeffs):
+        return SplineSurface(self._spaces, coeffs)
+
+
+class SplineSurface(object):
+
+    def __init__(self, spaces, coeffs):
+        self._spaces = spaces
+        self._coeffs = coeffs
 
 
 ### TEST FUNCTIONS:
