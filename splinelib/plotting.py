@@ -26,7 +26,7 @@ def add_spline_to_plot(spline, include_control_polygon=True, include_knots=True)
     min_val = np.min(ps)
     dist = np.max(ps) - min_val
 
-    steps = [i * (dist / 8) - dist for i in range(spline._space._degree + 1)]
+    steps = [i * (dist / 8) - dist for i in range(spline.get_degree() + 1)]
     similar_knots = 0
     previous_knot = None
 
@@ -38,7 +38,7 @@ def add_spline_to_plot(spline, include_control_polygon=True, include_knots=True)
             return abs(d1 - d2) < tol
 
     if not spline.is_curve() and include_knots:
-        for knot in spline._space._knots:
+        for knot in spline.get_knots():
             if double_equals(knot, previous_knot):
                 similar_knots += 1
             else:
