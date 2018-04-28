@@ -158,7 +158,7 @@ def fit_curve(data, knots, degree, method=least_squares, parametrization=cord_le
     return space.create_spline(coeffs)
 
 
-def generate_uniform_knots(data, degree, step_size=1, regular=True):
+def generate_uniform_knots(data, degree, length=20, regular=True):
     """
     Generates a d+1-extended knot vector for the data, with knots uniformly distributed.
 
@@ -166,8 +166,7 @@ def generate_uniform_knots(data, degree, step_size=1, regular=True):
         data (np.ndarray):  Data to fit knots from (parametrization). Used to find min and
                             max value needed.
         degree (int):       Degree of spline to fit on knot vector.
-        step_size (int):    Optional. Step size between entries in the knot vector.
-                            Default is 1.
+        length (int):       Optional. Length of created knot vector. Default is 20.
         regular (bool):     Optional. Make vector d+1-regular in addition to d+1-extended.
                             Default is True
 
@@ -175,19 +174,26 @@ def generate_uniform_knots(data, degree, step_size=1, regular=True):
         np.ndarray: A knot vector for the data with knots uniformly distributed.
     """
     # Find min and max, and store something slightly less/bigger
-    minval = np.floor(np.min(data) * 10) / 10
-    maxval = np.ceil(np.max(data) * 10) / 10
+    minval = np.min(data)
+    maxval = np.max(data) + 1e-10
 
     # Create inner knots, each with a multiplicity of 1
-    inner_knots = np.arange(minval + 1, maxval, step_size)
+    inner_knots = np.linspace(minval, maxval, length - 2 * (degree), endpoint=True)
 
-    # Pad with d+1 entries of min/maxval at the ends to make the knot d+1-regular
     if regular:
-        knots = np.zeros(2 * (degree + 1) + len(inner_knots))
-        knots[0:degree + 1] = (degree + 1) * [minval]
-        knots[degree + 1:len(inner_knots) + degree + 1] = inner_knots
-        knots[len(inner_knots) + degree + 1:] = (degree + 1) * [maxval]
+        # Pad with d+1 entries of min/maxval at the ends to make the knot d+1-regular
+        knots = np.zeros(2 * degree + len(inner_knots))
+        knots[0:degree] = degree * [minval]
+        knots[degree:len(inner_knots) + degree] = inner_knots
+        knots[len(inner_knots) + degree:] = degree * [maxval]
+
     else:
-        knots = np.hstack([np.array([minval]), inner_knots, np.array([maxval])])
+        # Find step size and continue d+1 times in each direction
+        step_size = inner_knots[1] - inner_knots[0]
+
+        knots = np.linspace(minval - (degree) * step_size,
+                            maxval + (degree) * step_size,
+                            length,
+                            endpoint=True)
 
     return knots

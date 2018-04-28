@@ -218,8 +218,8 @@ class Spline(object):
         if not isinstance(coeffs, (np.ndarray)):
             raise TypeError("coeff vector must be a numpy array")
 
-        if not isinstance(space, SplineSpace):
-            raise TypeError("space must be of type SplineSpace")
+        # if not isinstance(space, SplineSpace):
+        #     raise TypeError("space must be of type SplineSpace")
 
         # Store attributes
         self._space = space
@@ -427,6 +427,29 @@ class Spline(object):
         self._coeffs = new_coeffs
 
 
+    def close(self):
+        """
+        Forces the spline curve to close. This will change the above space.
+
+        Raises:
+            ValueError: if spline is not a curve, but a function
+        """
+        if not self.is_curve():
+            raise ValueError("Cannot close a function. Spline object must be a curve.")
+
+        for i in range(self._space.get_degree()):
+            if (i > self._space.get_degree() / 2):
+                self._coeffs[:, -self._space.get_degree() + i] = self._coeffs[:, i]
+            elif (i == self._space.get_degree() / 2):
+                middle = self._coeffs[:, -self._space.get_degree() + i] + self._coeffs[:, i] / 2
+
+                self._coeffs[:, -self._space.get_degree() + i] = middle
+                self._coeffs[:, i] = middle
+
+            else:
+                self._coeffs[:, i] = self._coeffs[:, -self._space.get_degree() + i]
+
+
     def evaluate(self, x):
         """
         Evaluate a spline in the (given) point(s).
@@ -466,10 +489,11 @@ class Spline(object):
         Returns:
             A tuple of np.ndarrays with arguments and values.
         """
-        xs = np.linspace(self._space._knots[0],
-                         self._space._knots[-1],
-                         100,
+        xs = np.linspace(self._space._knots[self._space.get_degree()],
+                         self._space._knots[-self._space.get_degree() - 1],
+                         1000,
                          endpoint=False)
+
         ps = self.evaluate(xs)
 
         if not self.is_curve():
