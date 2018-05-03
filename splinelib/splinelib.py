@@ -169,6 +169,17 @@ class SplineSpace(object):
         return self._degree
 
 
+    def get_support(self):
+        """
+        Returns the largest possible support of all the splines in the space
+
+        Returns:
+            float, float: boundaries of support (minimum and maximum)
+        """
+        return self._knots[self.get_degree()], \
+               self._knots[-self.get_degree() - 1]
+
+
     def create_spline(self, coeffs):
         """
         Creates a spline within this spline space with given coefficients
@@ -333,6 +344,16 @@ class Spline(object):
         return self._space.get_degree()
 
 
+    def get_support(self):
+        """
+        Returns the support of the spline
+
+        Returns:
+            float, float: boundaries of support (minimum and maximum)
+        """
+        return self._space.get_support()
+
+
     def is_curve(self):
         """
         Returns True if this object represents a curve, False if it represents a function.
@@ -441,7 +462,8 @@ class Spline(object):
             if (i > self._space.get_degree() / 2):
                 self._coeffs[:, -self._space.get_degree() + i] = self._coeffs[:, i]
             elif (i == self._space.get_degree() / 2):
-                middle = self._coeffs[:, -self._space.get_degree() + i] + self._coeffs[:, i] / 2
+                middle = self._coeffs[:, -self._space.get_degree() + i] + self._coeffs[:,
+                                                                          i] / 2
 
                 self._coeffs[:, -self._space.get_degree() + i] = middle
                 self._coeffs[:, i] = middle
@@ -489,8 +511,7 @@ class Spline(object):
         Returns:
             A tuple of np.ndarrays with arguments and values.
         """
-        xs = np.linspace(self._space._knots[self._space.get_degree()],
-                         self._space._knots[-self._space.get_degree() - 1],
+        xs = np.linspace(*self.get_support(),
                          1000,
                          endpoint=False)
 
@@ -544,6 +565,13 @@ class Spline(object):
 class TensorProductSplineSpace(object):
 
     def __init__(self, spaces):
+        if not len(spaces) == 2:
+            raise TypeError("Need two dimensions of spline spaces")
+
+        # if not isinstance(spaces[0], SplineSpace) \
+        #         or not isinstance(spaces[1], SplineSpace):
+        #     raise TypeError("Both spaces must be of type SplineSpace!")
+
         self._spaces = spaces
 
 
@@ -554,8 +582,64 @@ class TensorProductSplineSpace(object):
 class SplineSurface(object):
 
     def __init__(self, spaces, coeffs):
+        if not isinstance(coeffs, np.ndarray):
+            raise TypeError("Coeffs must be a numpy array")
+        if not np.ndim(coeffs) == 2:
+            raise TypeError("Coeffs must be a matrix (ie, ndim=2)")
+        if not coeffs.shape == (len(spaces[0]), len(spaces[1])):
+            raise TypeError(
+                "Coeffs must be of shape [{}, {}]".format(len(spaces[0]), len(spaces[1]))
+            )
+
         self._spaces = spaces
         self._coeffs = coeffs
+
+
+    def get_coeffs(self):
+        return self._coeffs.copy()
+
+
+    def get_spaces(self):
+        return self._spaces
+
+
+    def evaluate(self, u, v):
+        if not isinstance(u, (int, float)) or not isinstance(v, (int, float)):
+            raise TypeError("Args must be numbers")
+
+        # Find knot indecies
+        mu = self._spaces[0].find_knot_index(u)
+        nu = self._spaces[1].find_knot_index(v)
+
+        # Make a local reference to degree for easier access in the formula
+        d1 = self._spaces[0].get_degree()
+        d2 = self._spaces[0].get_degree()
+
+        # Get value of all active B-splines for given us and vs
+        phi = self._spaces[0].evaluate_basis(u)
+        psi = self._spaces[1].evaluate_basis(v)
+
+        # Combine with coeff matrix to yield value of B-spline
+        return phi @ self._coeffs[mu - d1:mu + 1, nu - d2:nu + 1] @ psi
+
+
+    def evaluate_all(self):
+        x = np.linspace(*self._spaces[0].get_support(),
+                        100,
+                        endpoint=False)
+
+        y = np.linspace(*self._spaces[1].get_support(),
+                        100,
+                        endpoint=False)
+
+        z = np.zeros([len(x), len(y)])
+
+        for i in range(len(x)):
+            for j in range(len(y)):
+                z[i, j] = self.evaluate(x[i], y[j])
+
+        x, y = np.meshgrid(x, y)
+        return x, y, z
 
 
 ### TEST FUNCTIONS:

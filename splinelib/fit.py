@@ -16,7 +16,7 @@ def least_squares(data, knots, degree, weights=None):
                                 data.
 
     Returns:
-        Spline: a spline fitted to the data
+        Spline: a spline function fitted to the data
     """
     # Ensure float type to avoid integer computations
     data = data.astype(np.float64)
@@ -197,3 +197,28 @@ def generate_uniform_knots(data, degree, length=20, regular=True):
                             endpoint=True)
 
     return knots
+
+
+def sample(spline, num=20, min=None, max=None):
+    """
+    Samples the spline uniformly, and returns points.
+
+    Args:
+        spline (Spline):    Spline to sample
+        num (int):          Number of points to sample. Optional, defaults to 20.
+        min (int):          Lower bound of sampling range. Optional, defaults to lower
+                            bound of the support for the spline if omitted.
+        max (int):          Upper bound of sampling range. Optional, defaults to upper
+                            bound of the support for the spline if omitted.
+
+    Returns (np.ndarray): Sampled points
+
+    """
+    if min is None:
+        min = spline.get_support()[0]
+    if max is None:
+        max = spline.get_support()[1]
+
+    xs = np.linspace(min, max, num, endpoint=False)
+
+    return spline(xs)
