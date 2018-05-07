@@ -354,9 +354,10 @@ class Spline(object):
         return self._space.get_support()
 
 
-    def is_curve(self):
+    def is_parametric(self):
         """
-        Returns True if this object represents a curve, False if it represents a function.
+        Returns True if this object represents a parametric curve, False if it represents
+        a function.
 
         Returns:
             bool: Whether the Spline object represents a curve or a function
@@ -372,7 +373,7 @@ class Spline(object):
         Returns:
             (np.ndarray, np.ndarray): x and y coordinates for control polygon
         """
-        if not self.is_curve():
+        if not self.is_parametric():
             ts = np.zeros_like(self._coeffs);
 
             for j in range(len(self._coeffs)):
@@ -455,7 +456,7 @@ class Spline(object):
         Raises:
             ValueError: if spline is not a curve, but a function
         """
-        if not self.is_curve():
+        if not self.is_parametric():
             raise ValueError("Cannot close a function. Spline object must be a curve.")
 
         for i in range(self._space.get_degree()):
@@ -517,7 +518,7 @@ class Spline(object):
 
         ps = self.evaluate(xs)
 
-        if not self.is_curve():
+        if not self.is_parametric():
             return xs, ps[0, :]
         else:
             return ps
@@ -575,32 +576,84 @@ class TensorProductSplineSpace(object):
         self._spaces = spaces
 
 
+    def get_spaces(self):
+        """
+        Returns all the spaces this space is a tensor product space of.
+
+        Returns:
+            List of SplineSpace: Each individual dimension in the tensor product spline
+            space.
+        """
+        return self._spaces
+
+
     def create_spline(self, coeffs):
-        return SplineSurface(self._spaces, coeffs)
+        """
+        Creates a spline surface within this spline space with given coefficients
+
+        Args:
+            coeffs (np.ndarray): Coefficient matrix for the spline
+
+        Returns:
+            A Spline object, representing a spline inside the space
+
+        Raises:
+            ValueError:			If the number of coefficients doesn't match
+                                space dimension.
+            TypeError:			If any arg is of the wrong type
+        """
+        return SplineSurface(self, coeffs)
 
 
 class SplineSurface(object):
 
-    def __init__(self, spaces, coeffs):
+    def __init__(self, space, coeffs):
         if not isinstance(coeffs, np.ndarray):
             raise TypeError("Coeffs must be a numpy array")
-        if not np.ndim(coeffs) == 2:
-            raise TypeError("Coeffs must be a matrix (ie, ndim=2)")
-        if not coeffs.shape == (len(spaces[0]), len(spaces[1])):
+        if not np.ndim(coeffs) in [2, 3]:
             raise TypeError(
-                "Coeffs must be of shape [{}, {}]".format(len(spaces[0]), len(spaces[1]))
+                "Coeffs must be a matrix or an array of matrices (ie, ndim is 2 or 3)"
+            )
+        if not coeffs.shape[0:2] == (
+                len(space.get_spaces()[0]), len(space.get_spaces()[1])):
+            raise TypeError(
+                "Coeffs must be of shape [{}, {}]".format(len(space.get_spaces()[0]),
+                                                          len(space.get_spaces()[1]))
             )
 
-        self._spaces = spaces
+        self._space = space
         self._coeffs = coeffs
 
 
+    def is_parametric(self):
+        """
+        Returns true if the object represents a parametric spline surface.
+
+        Returns:
+            bool: Whether spline is a parametric surface or not.
+        """
+        return np.ndim(self._coeffs) == 3
+
+
     def get_coeffs(self):
+        """
+        Returns a copy of the coefficients to the spline that can safely be edited without
+        accidentally modifying the spline.
+
+        Returns:
+            np.ndarray: coefficients of spline
+        """
         return self._coeffs.copy()
 
 
-    def get_spaces(self):
-        return self._spaces
+    def get_space(self):
+        """
+        Get the space this surface is in.
+
+        Returns:
+            TensorProductSplineSpace: The space of the surface.
+        """
+        return self._space
 
 
     def evaluate(self, u, v):
@@ -608,38 +661,54 @@ class SplineSurface(object):
             raise TypeError("Args must be numbers")
 
         # Find knot indecies
-        mu = self._spaces[0].find_knot_index(u)
-        nu = self._spaces[1].find_knot_index(v)
+        mu = self._space.get_spaces()[0].find_knot_index(u)
+        nu = self._space.get_spaces()[1].find_knot_index(v)
 
         # Make a local reference to degree for easier access in the formula
-        d1 = self._spaces[0].get_degree()
-        d2 = self._spaces[0].get_degree()
+        d1 = self._space.get_spaces()[0].get_degree()
+        d2 = self._space.get_spaces()[0].get_degree()
 
         # Get value of all active B-splines for given us and vs
-        phi = self._spaces[0].evaluate_basis(u)
-        psi = self._spaces[1].evaluate_basis(v)
+        phi = self._space.get_spaces()[0].evaluate_basis(u)
+        psi = self._space.get_spaces()[1].evaluate_basis(v)
 
         # Combine with coeff matrix to yield value of B-spline
-        return phi @ self._coeffs[mu - d1:mu + 1, nu - d2:nu + 1] @ psi
+        if self.is_parametric():
+            point = np.zeros(self._coeffs.shape[2])
+            for d in range(self._coeffs.shape[2]):
+                point[d] = phi @ self._coeffs[mu - d1:mu + 1, nu - d2:nu + 1, d] @ psi
+            return point
+        else:
+            return phi @ self._coeffs[mu - d1:mu + 1, nu - d2:nu + 1] @ psi
 
 
-    def evaluate_all(self):
-        x = np.linspace(*self._spaces[0].get_support(),
-                        100,
+    def evaluate_all(self, points_u=50, points_v=50):
+        u = np.linspace(*self._space.get_spaces()[0].get_support(),
+                        points_u,
                         endpoint=False)
 
-        y = np.linspace(*self._spaces[1].get_support(),
-                        100,
+        v = np.linspace(*self._space.get_spaces()[1].get_support(),
+                        points_v,
                         endpoint=False)
 
-        z = np.zeros([len(x), len(y)])
+        if self.is_parametric():
+            points = np.zeros([points_u, points_v, 3])
 
-        for i in range(len(x)):
-            for j in range(len(y)):
-                z[i, j] = self.evaluate(x[i], y[j])
+            for i in range(points_u):
+                for j in range(points_v):
+                    points[i, j, :] = self.evaluate(u[i], v[j])
 
-        x, y = np.meshgrid(x, y)
-        return x, y, z
+            return points
+
+        else:
+            z = np.zeros([len(u), len(v)])
+
+            for i in range(len(u)):
+                for j in range(len(v)):
+                    z[i, j] = self.evaluate(u[i], v[j])
+
+            x, y = np.meshgrid(u, v)
+            return x, y, z
 
 
 ### TEST FUNCTIONS:

@@ -67,6 +67,86 @@ def least_squares(data, knots, degree, weights=None):
     return space.create_spline(c_new)
 
 
+def least_squares_3d(data_x, data_y, data_f, knots_x, knots_y, degree, weights_x=None,
+                     weights_y=None):
+    """
+
+    Args:
+        data_x (np.ndarray):            Data points in x direction. Vector of size m1.
+        data_y (np.ndarray):            Data points in y direction. Vector of size m2.
+        data_f (np.ndarray):            Estimated function values for each x and y. Matrix
+                                        of shape (m1, m2).
+        knots_x (np.ndarray):           Knot vector for x space.
+        knots_y (np.ndarray):           Knot vector for y space.
+        degree (int):                   Degree of spline surface.
+        weights_x (np.ndarray):         Weight vector for x direction (of length m1).
+                                        Optional, defaults to 1s if omitted.
+        weights_y (np.ndarray):         Weight vector for y direction (of length m2).
+                                        Optional, defaults to 1s if omitted.
+
+    Returns:
+        SplineSurface: A spline surface fitted to the data.
+    """
+    # Ensure float type to avoid integer computations
+    data_x = data_x.astype(np.float64)
+    data_y = data_y.astype(np.float64)
+    data_f = data_f.astype(np.float64)
+
+    # Default weights to 1 if omitted
+    if weights_x is None:
+        weights_x = np.ones_like(data_x)
+
+    if weights_y is None:
+        weights_y = np.ones_like(data_y)
+
+    # Init space
+    space = TensorProductSplineSpace([
+        SplineSpace(knots_x, degree),
+        SplineSpace(knots_y, degree)
+    ])
+
+    # Get dimensions
+    m1 = len(data_x)
+    m2 = len(data_y)
+    n1 = len(knots_x) - degree - 1
+    n2 = len(knots_y) - degree - 1
+
+    # Construct data matrices
+    A = np.zeros([m1, n1])
+    B = np.zeros([m2, n2])
+    G = np.zeros([m1, m2])
+
+    space_x, space_y = space.get_spaces()
+
+    # Construct A
+    for i in range(m1):
+        mu = space_x.find_knot_index(data_x[i])
+        A[i, mu - degree:mu + 1] = np.sqrt(weights_x[i]) * space_x(data_x[i])
+
+    # Construct B
+    for j in range(m2):
+        nu = space_y.find_knot_index(data_y[j])
+        B[j, nu - degree:nu + 1] = np.sqrt(weights_y[i]) * space_y(data_y[j])
+
+    # Construct G
+    for i, j in np.ndindex(G.shape):
+        G[i, j] = np.sqrt(weights_x[i] * weights_y[j]) * data_f[i, j]
+
+    # Solve normal equations
+    try:
+        D = np.linalg.solve(A.T @ A, A.T @ G)
+        C = np.linalg.solve(B.T @ B, B.T @ D.T).T
+
+        error = False
+    except np.linalg.LinAlgError:
+        error = True
+
+    if error:
+        raise np.linalg.LinAlgError("No solution to normal equations")
+
+    return space.create_spline(C)
+
+
 def uniform(data):
     """
     Returns a column vector with parametrization for the data using the uniform
@@ -121,16 +201,15 @@ def centripetal(data):
 
 def fit_curve(data, knots, degree, method=least_squares, parametrization=cord_length):
     """
-    Fits a curve of arbitrary dimension D from m given data points
+    Fits a parametric curve of arbitrary dimension D from m given data points
 
     Args:
-        data (np.ndarray):              Data to fit curve from. A (m, D+1) matrix. First
-                                        column is the parametrization,
-        knots (np.ndarray):             Knot vector
-        degree (int):                   Degree of desired spline
+        data (np.ndarray):              Data to fit curve from. An (m, D) matrix.
+        knots (np.ndarray):             Knot vector.
+        degree (int):                   Degree of desired spline.
         method (callable):              Optional. Method for approximation. Available
                                         options are
-                                            - splinelib.fit.least_squares.
+                                            - splinelib.fit.least_squares
         parametrization (callable):     Optional. Method for parametrization. Available
                                         options are
                                             - splinelib.fit.uniform
@@ -155,6 +234,29 @@ def fit_curve(data, knots, degree, method=least_squares, parametrization=cord_le
 
     # Create spline and return
     space = SplineSpace(knots, degree)
+    return space.create_spline(coeffs)
+
+
+def fit_surface(data, knots_u, knots_v, degree, method=least_squares_3d, parametrization=cord_length, par_u=None, par_v=None):
+
+    if par_u is None:
+        par_u = parametrization(data[:,0,0])
+    if par_v is None:
+        par_v = parametrization(data[0,:,0])
+
+    D = data.shape[2]
+    m1 = len(knots_u) - degree - 1
+    m2 = len(knots_v) - degree - 1
+
+    coeffs = np.zeros([m1,m2, D])
+
+    for dimension in range(D):
+        coeffs[:,:, dimension] = method(par_u, par_v, data[:, :, dimension], knots_u, knots_v, 3).get_coeffs()
+
+    space = TensorProductSplineSpace([
+        SplineSpace(knots_u, degree),
+        SplineSpace(knots_v, degree)
+    ])
     return space.create_spline(coeffs)
 
 
