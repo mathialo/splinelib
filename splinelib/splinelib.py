@@ -229,8 +229,8 @@ class Spline(object):
         if not isinstance(coeffs, (np.ndarray)):
             raise TypeError("coeff vector must be a numpy array")
 
-        # if not isinstance(space, SplineSpace):
-        #     raise TypeError("space must be of type SplineSpace")
+        if not isinstance(space, SplineSpace):
+            raise TypeError("space must be of type SplineSpace")
 
         # Store attributes
         self._space = space
@@ -564,14 +564,27 @@ class Spline(object):
 
 
 class TensorProductSplineSpace(object):
+    """
+    Class for representing a Tensor product space between two spline spaces.
+    """
 
     def __init__(self, spaces):
+        """
+        Initialize a tensor-product spline space from given spline spaces.
+
+        Args:
+            spaces (iterable):      A list of spaces to make a tensor product space from.
+                                    Currently, only two spaces are supported.
+
+        Raises:
+            TypeError:			    If any arg is of the wrong type
+        """
         if not len(spaces) == 2:
             raise TypeError("Need two dimensions of spline spaces")
 
-        # if not isinstance(spaces[0], SplineSpace) \
-        #         or not isinstance(spaces[1], SplineSpace):
-        #     raise TypeError("Both spaces must be of type SplineSpace!")
+        if not isinstance(spaces[0], SplineSpace) \
+                or not isinstance(spaces[1], SplineSpace):
+            raise TypeError("Both spaces must be of type SplineSpace!")
 
         self._spaces = spaces
 
@@ -592,22 +605,36 @@ class TensorProductSplineSpace(object):
         Creates a spline surface within this spline space with given coefficients
 
         Args:
-            coeffs (np.ndarray): Coefficient matrix for the spline
+            coeffs (np.ndarray): Coefficient matrix for the spline. If ndim is 2 the
+                                 spline will be non-parametric, if ndim is 3, the spline
+                                 will be parametric.
 
         Returns:
             A Spline object, representing a spline inside the space
 
         Raises:
-            ValueError:			If the number of coefficients doesn't match
-                                space dimension.
+            ValueError:			If the number of coefficients doesn't match space dimension.
             TypeError:			If any arg is of the wrong type
         """
         return SplineSurface(self, coeffs)
 
 
 class SplineSurface(object):
+    """
+    Class for representing an element in a tensor-product spline space
+    """
 
     def __init__(self, space, coeffs):
+        """
+        Initialize a spline. Do not use this constructor directly, consider using
+        TensorProductSplineSpace.create_spline instead.
+
+        Args:
+            space (TensorProductSplineSpace):   The spline space this spline is in.
+            coeffs (np.ndarray):                Coefficient matrix. If ndim is 2 the
+                                                spline will be non-parametric, if ndim is
+                                                3, the spline will be parametric.
+        """
         if not isinstance(coeffs, np.ndarray):
             raise TypeError("Coeffs must be a numpy array")
         if not np.ndim(coeffs) in [2, 3]:
@@ -657,6 +684,19 @@ class SplineSurface(object):
 
 
     def evaluate(self, u, v):
+        """
+        Evaluate surface in given point
+
+        Args:
+            u (float):      Either x coordinate (if non-parametric) or parameter value in
+                            first dimension (if parametric)
+            v (float):      Either y coordinate (if non-parametric) or parameter value in
+                            second dimension (if parametric):
+
+        Returns:
+            float or np.ndarray: Function value (if non-parametric) or point (if
+            parametric) of surface at given (u, v).
+        """
         if not isinstance(u, (int, float)) or not isinstance(v, (int, float)):
             raise TypeError("Args must be numbers")
 
@@ -683,6 +723,19 @@ class SplineSurface(object):
 
 
     def evaluate_all(self, points_u=50, points_v=50):
+        """
+        Evaluate surface on its support. Only supported for 3D surfaces.
+
+        Args:
+            points_u (int):     Number of points in u direction. Optional, default is 50.
+            points_v (int):     Number of points in v direction. Optional, default is 50.
+
+        Returns:
+            triple of np.ndarray or np.ndarray: x, y and z coordinates for surface. If the
+            spline is non-paramatric, it's a triple of (x, y, z) where x and y are a
+            meshgrid of parameters, and z is the corresponding function values. If the
+            spline is parametric it's a (points_u, points_v, 3)-shaped np.ndarray of points.
+        """
         u = np.linspace(*self._space.get_spaces()[0].get_support(),
                         points_u,
                         endpoint=False)
@@ -710,75 +763,3 @@ class SplineSurface(object):
             x, y = np.meshgrid(u, v)
             return x, y, z
 
-
-### TEST FUNCTIONS:
-
-def _test_find_knot_index():
-    knots = np.array([-1, -1, -1, -1, 0, 1, 2, 3, 4, 5, 5, 5, 5],
-                     dtype=np.float64)
-    space = SplineSpace(knots, 3)
-
-    assert space.find_knot_index(-0.5) == 3
-    assert space.find_knot_index(1.5) == 5
-    assert space.find_knot_index(3) == 7
-    assert space.find_knot_index(4.5) == 8
-
-    try:
-        space.find_knot_index(-2)
-
-        # if we get here, no exception was raised, throw error
-        raise AssertionError("No exception raised for x below knot range")
-
-    except ValueError:
-        pass
-
-    try:
-        space.find_knot_index(6)
-
-        # if we get here, no exception was raised, throw error
-        raise AssertionError("No exception raised for x above knot range")
-
-    except ValueError:
-        pass
-
-
-def _test_evaluation(tol=1e-10):
-    knots = np.array([-1, -1, -1, -1, 0, 1, 2, 3, 4, 5, 5, 5, 5],
-                     dtype=np.float64)
-    coeffs = np.array([-1, 1, -1, 1, -1, 1, -1, 1, -1], dtype=np.float64)
-    degree = 3
-
-    space = SplineSpace(knots, degree)
-
-    b0 = np.zeros(100)
-    b1 = np.zeros(100)
-    b2 = np.zeros(100)
-    b3 = np.zeros(100)
-
-    xs = np.linspace(0, 1, 100, endpoint=False)
-
-    for i in range(100):
-        b0[i], b1[i], b2[i], b3[i] = space(xs[i])
-
-    # Check that all the basis values sum to 1
-    sums = b0 + b1 + b2 + b3
-    for s in sums:
-        assert (s - 1) < tol
-
-    # Compare the two evaluation methods, they should  yield similar results
-    p = space.create_spline(coeffs)
-    xs = np.linspace(-1, 5, 100, endpoint=False)
-    ps = np.zeros(100)
-    ps2 = np.zeros(100)
-
-    for i in range(100):
-        ps[i] = p(xs[i])
-        mu = space.find_knot_index(xs[i])
-        ps2[i] = np.dot(space(xs[i]), coeffs[mu - degree:mu + 1])
-
-    assert np.sum(ps - ps2) < tol
-
-
-if __name__ == '__main__':
-    _test_find_knot_index()
-    _test_evaluation()

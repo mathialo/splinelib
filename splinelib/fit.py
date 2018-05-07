@@ -4,7 +4,7 @@ from .splinelib import *
 
 def least_squares(data, knots, degree, weights=None):
     """
-    Fit a spline to the data using least squares optimization
+    Fit a non-parametric spline function to the data using least squares optimization
 
     Args:
         data (np.ndarray):      Data to fit from, with dimensions (m, 2). First column is
@@ -70,6 +70,8 @@ def least_squares(data, knots, degree, weights=None):
 def least_squares_3d(data_x, data_y, data_f, knots_x, knots_y, degree, weights_x=None,
                      weights_y=None):
     """
+    Fit a non-parametric spline function in two variables to given data using least
+    squares optimization.
 
     Args:
         data_x (np.ndarray):            Data points in x direction. Vector of size m1.
@@ -238,21 +240,51 @@ def fit_curve(data, knots, degree, method=least_squares, parametrization=cord_le
 
 
 def fit_surface(data, knots_u, knots_v, degree, method=least_squares_3d, parametrization=cord_length, par_u=None, par_v=None):
+    """
+    Fit a parametric spline surface to given data of arbitrary dimension D.
 
+    Args:
+        data (np.ndarray):          A data matrix with shape (n1, n2, D), where n1 and n2
+                                    are the number of points in each parameter direction,
+                                    and D is the dimension of space (typically 3).
+        knots_u (np.ndarray):       Knot vector in u direction.
+        knots_v (np.ndarray):       Knot vecotr in v direction.
+        degree (int):               Degree of splines.
+        method (callable):          Approximation method. Available options are:
+                                        - spinelib.fit.least_squares_3d
+                                    Optional. Default is least_squares_3d.
+        parametrization (callable): Scheme for generation of parametrization. Options are:
+                                        - splinelib.fit.uniform
+                                        - splinelib.fit.cord_length
+                                        - splinelib.fit.centripetal
+                                    Optional. Default is cord_length.
+        par_u (np.ndarray):         Override parametrization in u direction (this ignores
+                                    whatever that is passed as 'parametrization').
+        par_v (np.ndarray):         Override parametrization in v direction (this ignores
+                                    whatever that is passed as 'parametrization').
+
+    Returns:
+        SplineSurface: A parametrix surface fitted to the data.
+    """
+    # Do parametrization if necessary
     if par_u is None:
         par_u = parametrization(data[:,0,0])
     if par_v is None:
         par_v = parametrization(data[0,:,0])
 
+    # Get implicit parameter values
     D = data.shape[2]
     m1 = len(knots_u) - degree - 1
     m2 = len(knots_v) - degree - 1
 
+    # Initialize result array
     coeffs = np.zeros([m1,m2, D])
 
+    # Fit each dimension using requested method
     for dimension in range(D):
         coeffs[:,:, dimension] = method(par_u, par_v, data[:, :, dimension], knots_u, knots_v, 3).get_coeffs()
 
+    # Create space and resulting surface.
     space = TensorProductSplineSpace([
         SplineSpace(knots_u, degree),
         SplineSpace(knots_v, degree)
