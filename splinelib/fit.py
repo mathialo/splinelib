@@ -239,7 +239,8 @@ def fit_curve(data, knots, degree, method=least_squares, parametrization=cord_le
     return space.create_spline(coeffs)
 
 
-def fit_surface(data, knots_u, knots_v, degree, method=least_squares_3d, parametrization=cord_length, par_u=None, par_v=None):
+def fit_surface(data, knots_u, knots_v, degree, method=least_squares_3d,
+                parametrization=cord_length, par_u=None, par_v=None):
     """
     Fit a parametric spline surface to given data of arbitrary dimension D.
 
@@ -268,9 +269,9 @@ def fit_surface(data, knots_u, knots_v, degree, method=least_squares_3d, paramet
     """
     # Do parametrization if necessary
     if par_u is None:
-        par_u = parametrization(data[:,0,0])
+        par_u = parametrization(data[:, 0, 0])
     if par_v is None:
-        par_v = parametrization(data[0,:,0])
+        par_v = parametrization(data[0, :, 0])
 
     # Get implicit parameter values
     D = data.shape[2]
@@ -278,11 +279,17 @@ def fit_surface(data, knots_u, knots_v, degree, method=least_squares_3d, paramet
     m2 = len(knots_v) - degree - 1
 
     # Initialize result array
-    coeffs = np.zeros([m1,m2, D])
+    coeffs = np.zeros([m1, m2, D])
 
     # Fit each dimension using requested method
     for dimension in range(D):
-        coeffs[:,:, dimension] = method(par_u, par_v, data[:, :, dimension], knots_u, knots_v, 3).get_coeffs()
+        coeffs[:, :, dimension] = method(
+            par_u,
+            par_v,
+            data[:, :, dimension],
+            knots_u,
+            knots_v, 3
+        ).get_coeffs()
 
     # Create space and resulting surface.
     space = TensorProductSplineSpace([

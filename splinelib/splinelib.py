@@ -568,6 +568,7 @@ class TensorProductSplineSpace(object):
     Class for representing a Tensor product space between two spline spaces.
     """
 
+
     def __init__(self, spaces):
         """
         Initialize a tensor-product spline space from given spline spaces.
@@ -623,6 +624,7 @@ class SplineSurface(object):
     """
     Class for representing an element in a tensor-product spline space
     """
+
 
     def __init__(self, space, coeffs):
         """
@@ -762,4 +764,3 @@ class SplineSurface(object):
 
             x, y = np.meshgrid(u, v)
             return x, y, z
-

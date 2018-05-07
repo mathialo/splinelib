@@ -37,6 +37,7 @@ def add_spline_to_plot(spline, include_control_polygon=True, include_knots=True)
         else:
             return abs(d1 - d2) < tol
 
+
     if not spline.is_parametric() and include_knots:
         for knot in spline.get_knots():
             if double_equals(knot, previous_knot):
