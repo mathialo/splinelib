@@ -109,7 +109,7 @@ class SplineSpace(object):
 
         # Argmax returns first entry when multiple indexes achieve maximum (max
         # is 1 when array is of boolean type)
-        return np.argmax(self._knots > x) - 1
+        return np.max(np.argmax(self._knots > x) - 1, 0)
 
 
     def evaluate_basis(self, x):

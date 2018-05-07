@@ -330,7 +330,9 @@ def generate_uniform_knots(data, degree, length=20, regular=True):
                             length,
                             endpoint=True)
 
-    return knots
+    # Shift knots with something very small to cope with rounding errors (knot indices
+    # will depend on stuff being strictly smaller).
+    return knots - 1e-11
 
 
 def sample(spline, num=20, min=None, max=None):
