@@ -316,7 +316,7 @@ def generate_uniform_knots(data, degree, length=20, regular=True):
     """
     # Find min and max, and store something slightly less/bigger
     minval = np.min(data)
-    maxval = np.max(data) + 1e-10
+    maxval = np.max(data) + 1e-12
 
     # Create inner knots, each with a multiplicity of 1
     inner_knots = np.linspace(minval, maxval, length - 2 * (degree), endpoint=True)
@@ -339,7 +339,7 @@ def generate_uniform_knots(data, degree, length=20, regular=True):
 
     # Shift knots with something very small to cope with rounding errors (knot indices
     # will depend on stuff being strictly smaller).
-    return knots - 1e-11
+    return knots - 1e-13
 
 
 def sample(spline, num=20, min=None, max=None):
