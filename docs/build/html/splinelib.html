@@ -1,0 +1,1006 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>splinelib package &mdash; splinelib 0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Welcome to splinelib’s documentation!" href="index.html" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> splinelib
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">splinelib package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-splinelib.fit">splinelib.fit module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-splinelib.plotting">splinelib.plotting module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-splinelib.splinelib">splinelib.splinelib module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-splinelib">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">splinelib</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>splinelib package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/splinelib.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="splinelib-package">
+<h1>splinelib package<a class="headerlink" href="#splinelib-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-splinelib.fit">
+<span id="splinelib-fit-module"></span><h2>splinelib.fit module<a class="headerlink" href="#module-splinelib.fit" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="splinelib.fit.centripetal">
+<code class="descclassname">splinelib.fit.</code><code class="descname">centripetal</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/splinelib/fit.html#centripetal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#splinelib.fit.centripetal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a column vector with parametrization for the data using the centripetal
+parametrization scheme.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>data</strong> (<em>np.ndarray</em>) – Points to parametrize</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Centripetal parametrization of the data</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">np.ndarray</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="splinelib.fit.cord_length">
+<code class="descclassname">splinelib.fit.</code><code class="descname">cord_length</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/splinelib/fit.html#cord_length"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#splinelib.fit.cord_length" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a column vector with parametrization for the data using the cord length
+parametrization scheme.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>data</strong> (<em>np.ndarray</em>) – Points to parametrize</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Cord length parametrization of the data</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">np.ndarray</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="splinelib.fit.fit_curve">
+<code class="descclassname">splinelib.fit.</code><code class="descname">fit_curve</code><span class="sig-paren">(</span><em>data</em>, <em>knots</em>, <em>degree</em>, <em>method=&lt;function least_squares&gt;</em>, <em>parametrization=&lt;function cord_length&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/splinelib/fit.html#fit_curve"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#splinelib.fit.fit_curve" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fits a parametric curve of arbitrary dimension D from m given data points</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>data</strong> (<em>np.ndarray</em>) – Data to fit curve from. An (m, D) matrix.</li>
+<li><strong>knots</strong> (<em>np.ndarray</em>) – Knot vector.</li>
+<li><strong>degree</strong> (<em>int</em>) – Degree of desired spline.</li>
+<li><strong>method</strong> (<em>callable</em>) – <p>Optional. Method for approximation. Available
+options are</p>
+<blockquote>
+<div><ul>
+<li>splinelib.fit.least_squares</li>
+</ul>
+</div></blockquote>
+</li>
+<li><strong>parametrization</strong> (<em>callable</em>) – <p>Optional. Method for parametrization. Available
+options are</p>
+<blockquote>
+<div><ul>
+<li>splinelib.fit.uniform</li>
+<li>splinelib.fit.cord_length</li>
+<li>splinelib.fit.centripetal</li>
+</ul>
+</div></blockquote>
+<p>Default is cord_length.</p>
+</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A spline curve fitted to the data.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#splinelib.splinelib.Spline" title="splinelib.splinelib.Spline">Spline</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="splinelib.fit.fit_surface">
+<code class="descclassname">splinelib.fit.</code><code class="descname">fit_surface</code><span class="sig-paren">(</span><em>data</em>, <em>knots_u</em>, <em>knots_v</em>, <em>degree</em>, <em>method=&lt;function least_squares_3d&gt;</em>, <em>parametrization=&lt;function cord_length&gt;</em>, <em>par_u=None</em>, <em>par_v=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/splinelib/fit.html#fit_surface"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#splinelib.fit.fit_surface" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fit a parametric spline surface to given data of arbitrary dimension D.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>data</strong> (<em>np.ndarray</em>) – A data matrix with shape (n1, n2, D), where n1 and n2
+are the number of points in each parameter direction,
+and D is the dimension of space (typically 3).</li>
+<li><strong>knots_u</strong> (<em>np.ndarray</em>) – Knot vector in u direction.</li>
+<li><strong>knots_v</strong> (<em>np.ndarray</em>) – Knot vecotr in v direction.</li>
+<li><strong>degree</strong> (<em>int</em>) – Degree of splines.</li>
+<li><strong>method</strong> (<em>callable</em>) – <dl class="docutils">
+<dt>Approximation method. Available options are:</dt>
+<dd><ul class="first last">
+<li>spinelib.fit.least_squares_3d</li>
+</ul>
+</dd>
+</dl>
+<p>Optional. Default is least_squares_3d.</p>
+</li>
+<li><strong>parametrization</strong> (<em>callable</em>) – <dl class="docutils">
+<dt>Scheme for generation of parametrization. Options are:</dt>
+<dd><ul class="first last">
+<li>splinelib.fit.uniform</li>
+<li>splinelib.fit.cord_length</li>
+<li>splinelib.fit.centripetal</li>
+</ul>
+</dd>
+</dl>
+<p>Optional. Default is cord_length.</p>
+</li>
+<li><strong>par_u</strong> (<em>np.ndarray</em>) – Override parametrization in u direction (this ignores
+whatever that is passed as ‘parametrization’).</li>
+<li><strong>par_v</strong> (<em>np.ndarray</em>) – Override parametrization in v direction (this ignores
+whatever that is passed as ‘parametrization’).</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A parametrix surface fitted to the data.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#splinelib.splinelib.SplineSurface" title="splinelib.splinelib.SplineSurface">SplineSurface</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="splinelib.fit.generate_uniform_knots">
+<code class="descclassname">splinelib.fit.</code><code class="descname">generate_uniform_knots</code><span class="sig-paren">(</span><em>data</em>, <em>degree</em>, <em>length=20</em>, <em>regular=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/splinelib/fit.html#generate_uniform_knots"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#splinelib.fit.generate_uniform_knots" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates a d+1-extended knot vector for the data, with knots uniformly distributed.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>data</strong> (<em>np.ndarray</em>) – Data to fit knots from (parametrization). Used to find min and
+max value needed.</li>
+<li><strong>degree</strong> (<em>int</em>) – Degree of spline to fit on knot vector.</li>
+<li><strong>length</strong> (<em>int</em>) – Optional. Length of created knot vector. Default is 20.</li>
+<li><strong>regular</strong> (<em>bool</em>) – Optional. Make vector d+1-regular in addition to d+1-extended.
+Default is True</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A knot vector for the data with knots uniformly distributed.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">np.ndarray</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="splinelib.fit.least_squares">
+<code class="descclassname">splinelib.fit.</code><code class="descname">least_squares</code><span class="sig-paren">(</span><em>data</em>, <em>knots</em>, <em>degree</em>, <em>weights=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/splinelib/fit.html#least_squares"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#splinelib.fit.least_squares" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fit a non-parametric spline function to the data using least squares optimization</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>data</strong> (<em>np.ndarray</em>) – Data to fit from, with dimensions (m, 2). First column is
+x direction, and second column is y direction.</li>
+<li><strong>knots</strong> (<em>np.ndarray</em>) – Knot vector to fit spline onto</li>
+<li><strong>degree</strong> (<em>int</em>) – Desired degree of spline</li>
+<li><strong>weights</strong> (<em>np.ndarray</em>) – Optional. Associated weights to data, assumed to all be
+equal to 1 if omitted. Must be of the same dimensions as
+data.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">a spline function fitted to the data</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#splinelib.splinelib.Spline" title="splinelib.splinelib.Spline">Spline</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="splinelib.fit.least_squares_3d">
+<code class="descclassname">splinelib.fit.</code><code class="descname">least_squares_3d</code><span class="sig-paren">(</span><em>data_x</em>, <em>data_y</em>, <em>data_f</em>, <em>knots_x</em>, <em>knots_y</em>, <em>degree</em>, <em>weights_x=None</em>, <em>weights_y=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/splinelib/fit.html#least_squares_3d"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#splinelib.fit.least_squares_3d" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fit a non-parametric spline function in two variables to given data using least
+squares optimization.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>data_x</strong> (<em>np.ndarray</em>) – Data points in x direction. Vector of size m1.</li>
+<li><strong>data_y</strong> (<em>np.ndarray</em>) – Data points in y direction. Vector of size m2.</li>
+<li><strong>data_f</strong> (<em>np.ndarray</em>) – Estimated function values for each x and y. Matrix
+of shape (m1, m2).</li>
+<li><strong>knots_x</strong> (<em>np.ndarray</em>) – Knot vector for x space.</li>
+<li><strong>knots_y</strong> (<em>np.ndarray</em>) – Knot vector for y space.</li>
+<li><strong>degree</strong> (<em>int</em>) – Degree of spline surface.</li>
+<li><strong>weights_x</strong> (<em>np.ndarray</em>) – Weight vector for x direction (of length m1).
+Optional, defaults to 1s if omitted.</li>
+<li><strong>weights_y</strong> (<em>np.ndarray</em>) – Weight vector for y direction (of length m2).
+Optional, defaults to 1s if omitted.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A spline surface fitted to the data.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#splinelib.splinelib.SplineSurface" title="splinelib.splinelib.SplineSurface">SplineSurface</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="splinelib.fit.sample">
+<code class="descclassname">splinelib.fit.</code><code class="descname">sample</code><span class="sig-paren">(</span><em>spline</em>, <em>num=20</em>, <em>min=None</em>, <em>max=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/splinelib/fit.html#sample"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#splinelib.fit.sample" title="Permalink to this definition">¶</a></dt>
+<dd><p>Samples the spline uniformly, and returns points.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>spline</strong> (<a class="reference internal" href="#splinelib.splinelib.Spline" title="splinelib.splinelib.Spline"><em>Spline</em></a>) – Spline to sample</li>
+<li><strong>num</strong> (<em>int</em>) – Number of points to sample. Optional, defaults to 20.</li>
+<li><strong>min</strong> (<em>int</em>) – Lower bound of sampling range. Optional, defaults to lower
+bound of the support for the spline if omitted.</li>
+<li><strong>max</strong> (<em>int</em>) – Upper bound of sampling range. Optional, defaults to upper
+bound of the support for the spline if omitted.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Returns (np.ndarray): Sampled points</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="splinelib.fit.uniform">
+<code class="descclassname">splinelib.fit.</code><code class="descname">uniform</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/splinelib/fit.html#uniform"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#splinelib.fit.uniform" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a column vector with parametrization for the data using the uniform
+parametrization scheme.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>data</strong> (<em>np.ndarray</em>) – Points to parametrize</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Uniform parametrization of the data</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">np.ndarray</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-splinelib.plotting">
+<span id="splinelib-plotting-module"></span><h2>splinelib.plotting module<a class="headerlink" href="#module-splinelib.plotting" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="splinelib.plotting.add_spline_to_plot">
+<code class="descclassname">splinelib.plotting.</code><code class="descname">add_spline_to_plot</code><span class="sig-paren">(</span><em>spline</em>, <em>include_control_polygon=True</em>, <em>include_knots=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/splinelib/plotting.html#add_spline_to_plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#splinelib.plotting.add_spline_to_plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds given spline to current matplotlib plot</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>spline</strong> (<a class="reference internal" href="#splinelib.splinelib.Spline" title="splinelib.splinelib.Spline"><em>Spline</em></a>) – Spline to add</li>
+<li><strong>include_control_polygon</strong> (<em>bool</em>) – plot or not. Default is True.</li>
+<li><strong>include_knots</strong> (<em>bool</em>) – Default is True</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">None</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-splinelib.splinelib">
+<span id="splinelib-splinelib-module"></span><h2>splinelib.splinelib module<a class="headerlink" href="#module-splinelib.splinelib" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="splinelib.splinelib.Spline">
+<em class="property">class </em><code class="descclassname">splinelib.splinelib.</code><code class="descname">Spline</code><span class="sig-paren">(</span><em>space: splinelib.splinelib.SplineSpace</em>, <em>coeffs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/splinelib/splinelib.html#Spline"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#splinelib.splinelib.Spline" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Class for representing a spline.</p>
+<dl class="method">
+<dt id="splinelib.splinelib.Spline.close">
+<code class="descname">close</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/splinelib/splinelib.html#Spline.close"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#splinelib.splinelib.Spline.close" title="Permalink to this definition">¶</a></dt>
+<dd><p>Forces the spline curve to close. This will change the above space.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code> – if spline is not a curve, but a function</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="splinelib.splinelib.Spline.evaluate">
+<code class="descname">evaluate</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/splinelib/splinelib.html#Spline.evaluate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#splinelib.splinelib.Spline.evaluate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate a spline in the (given) point(s).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>x</strong> – Point to evaluate spline in. If x is a float,
+it will be evaluated in the single point. If it
+is an array-like object, it will be evaulated in
+every point.</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The value of the spline in the given point</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">float or np.ndarray</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code> – If x is outside the knot vector range</li>
+<li><code class="xref py py-exc docutils literal notranslate"><span class="pre">TypeError</span></code> – If any arg is of the wrong type</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="splinelib.splinelib.Spline.evaluate_all">
+<code class="descname">evaluate_all</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/splinelib/splinelib.html#Spline.evaluate_all"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#splinelib.splinelib.Spline.evaluate_all" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate a spline on entire knot vector</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A tuple of np.ndarrays with arguments and values.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="splinelib.splinelib.Spline.get_coeffs">
+<code class="descname">get_coeffs</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/splinelib/splinelib.html#Spline.get_coeffs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#splinelib.splinelib.Spline.get_coeffs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a copy of the coefficients to the spline that can safely be edited without
+accidentally modifying the spline.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">coefficients of spline</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">np.ndarray</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="splinelib.splinelib.Spline.get_control_polygon">
+<code class="descname">get_control_polygon</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/splinelib/splinelib.html#Spline.get_control_polygon"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#splinelib.splinelib.Spline.get_control_polygon" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get points for the control polygon of the spline. This will only work for functions
+or 2D curves.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">x and y coordinates for control polygon</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">(np.ndarray, np.ndarray)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="splinelib.splinelib.Spline.get_degree">
+<code class="descname">get_degree</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/splinelib/splinelib.html#Spline.get_degree"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#splinelib.splinelib.Spline.get_degree" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the degree of the spline</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">degree of spline</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="splinelib.splinelib.Spline.get_knots">
+<code class="descname">get_knots</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/splinelib/splinelib.html#Spline.get_knots"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#splinelib.splinelib.Spline.get_knots" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a copy of the knot vector for the spline that can safely be edited without
+accidentally modifying the spline.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">knot vector for spline</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">np.ndarray</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="splinelib.splinelib.Spline.get_support">
+<code class="descname">get_support</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/splinelib/splinelib.html#Spline.get_support"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#splinelib.splinelib.Spline.get_support" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the support of the spline</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">boundaries of support (minimum and maximum)</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">float, float</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="splinelib.splinelib.Spline.insert_knots">
+<code class="descname">insert_knots</code><span class="sig-paren">(</span><em>new_knots</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/splinelib/splinelib.html#Spline.insert_knots"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#splinelib.splinelib.Spline.insert_knots" title="Permalink to this definition">¶</a></dt>
+<dd><p>Replace knot vector and recompute coefficients to fit these new knots.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>new_knots</strong> – New knot vector containing the old as a subset</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">None</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="splinelib.splinelib.Spline.is_parametric">
+<code class="descname">is_parametric</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/splinelib/splinelib.html#Spline.is_parametric"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#splinelib.splinelib.Spline.is_parametric" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns True if this object represents a parametric curve, False if it represents
+a function.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Whether the Spline object represents a curve or a function</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="splinelib.splinelib.SplineSpace">
+<em class="property">class </em><code class="descclassname">splinelib.splinelib.</code><code class="descname">SplineSpace</code><span class="sig-paren">(</span><em>knots</em>, <em>degree</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/splinelib/splinelib.html#SplineSpace"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#splinelib.splinelib.SplineSpace" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Class for representing a spline space</p>
+<dl class="method">
+<dt id="splinelib.splinelib.SplineSpace.create_spline">
+<code class="descname">create_spline</code><span class="sig-paren">(</span><em>coeffs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/splinelib/splinelib.html#SplineSpace.create_spline"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#splinelib.splinelib.SplineSpace.create_spline" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a spline within this spline space with given coefficients</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>coeffs</strong> (<em>np.ndarray</em>) – Coefficient vector for the spline</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A Spline object, representing a spline inside the space</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code> – If the number of coefficients doesn’t match
+space dimension.</li>
+<li><code class="xref py py-exc docutils literal notranslate"><span class="pre">TypeError</span></code> – If any arg is of the wrong type</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="splinelib.splinelib.SplineSpace.evaluate_basis">
+<code class="descname">evaluate_basis</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/splinelib/splinelib.html#SplineSpace.evaluate_basis"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#splinelib.splinelib.SplineSpace.evaluate_basis" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluates all the active basis splines on x</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>x</strong> (<em>float</em>) – Point to evaluate in</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The value of all active B-splines</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">np.ndarray</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code> – If x is outside the knot vector range</li>
+<li><code class="xref py py-exc docutils literal notranslate"><span class="pre">TypeError</span></code> – If any arg is of the wrong type</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="splinelib.splinelib.SplineSpace.find_knot_index">
+<code class="descname">find_knot_index</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/splinelib/splinelib.html#SplineSpace.find_knot_index"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#splinelib.splinelib.SplineSpace.find_knot_index" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given a knot vector and a real number x with x in [t_1, t_{n+d+1} ),
+returns the index µ such that t_µ ≤ x &lt; t_{µ+1}.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>x</strong> (<em>float</em>) – Real value to find the knot interval of</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">first index µ such that t_µ ≤ x &lt; t_{µ+1}</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">int</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code> – If x is outside the knot vector range</li>
+<li><code class="xref py py-exc docutils literal notranslate"><span class="pre">TypeError</span></code> – If any arg is of the wrong type</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="splinelib.splinelib.SplineSpace.get_degree">
+<code class="descname">get_degree</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/splinelib/splinelib.html#SplineSpace.get_degree"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#splinelib.splinelib.SplineSpace.get_degree" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the degree of the space</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">degree of spline</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="splinelib.splinelib.SplineSpace.get_knots">
+<code class="descname">get_knots</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/splinelib/splinelib.html#SplineSpace.get_knots"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#splinelib.splinelib.SplineSpace.get_knots" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a copy of the knot vector for the space that can safely be edited without
+accidentally modifying the space.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">knot vector for space</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">np.ndarray</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="splinelib.splinelib.SplineSpace.get_support">
+<code class="descname">get_support</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/splinelib/splinelib.html#SplineSpace.get_support"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#splinelib.splinelib.SplineSpace.get_support" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the largest possible support of all the splines in the space</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">boundaries of support (minimum and maximum)</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">float, float</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="splinelib.splinelib.SplineSurface">
+<em class="property">class </em><code class="descclassname">splinelib.splinelib.</code><code class="descname">SplineSurface</code><span class="sig-paren">(</span><em>space</em>, <em>coeffs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/splinelib/splinelib.html#SplineSurface"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#splinelib.splinelib.SplineSurface" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Class for representing an element in a tensor-product spline space</p>
+<dl class="method">
+<dt id="splinelib.splinelib.SplineSurface.evaluate">
+<code class="descname">evaluate</code><span class="sig-paren">(</span><em>u</em>, <em>v</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/splinelib/splinelib.html#SplineSurface.evaluate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#splinelib.splinelib.SplineSurface.evaluate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate surface in given point</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>u</strong> (<em>float</em>) – Either x coordinate (if non-parametric) or parameter value in
+first dimension (if parametric)</li>
+<li><strong>v</strong> (<em>float</em>) – Either y coordinate (if non-parametric) or parameter value in
+second dimension (if parametric):</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Function value (if non-parametric) or point (if
+parametric) of surface at given (u, v).</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">float or np.ndarray</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="splinelib.splinelib.SplineSurface.evaluate_all">
+<code class="descname">evaluate_all</code><span class="sig-paren">(</span><em>points_u=50</em>, <em>points_v=50</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/splinelib/splinelib.html#SplineSurface.evaluate_all"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#splinelib.splinelib.SplineSurface.evaluate_all" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate surface on its support. Only supported for 3D surfaces.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>points_u</strong> (<em>int</em>) – Number of points in u direction. Optional, default is 50.</li>
+<li><strong>points_v</strong> (<em>int</em>) – Number of points in v direction. Optional, default is 50.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">x, y and z coordinates for surface. If the
+spline is non-paramatric, it’s a triple of (x, y, z) where x and y are a
+meshgrid of parameters, and z is the corresponding function values. If the
+spline is parametric it’s a (points_u, points_v, 3)-shaped np.ndarray of points.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">triple of np.ndarray or np.ndarray</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="splinelib.splinelib.SplineSurface.get_coeffs">
+<code class="descname">get_coeffs</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/splinelib/splinelib.html#SplineSurface.get_coeffs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#splinelib.splinelib.SplineSurface.get_coeffs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a copy of the coefficients to the spline that can safely be edited without
+accidentally modifying the spline.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">coefficients of spline</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">np.ndarray</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="splinelib.splinelib.SplineSurface.get_space">
+<code class="descname">get_space</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/splinelib/splinelib.html#SplineSurface.get_space"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#splinelib.splinelib.SplineSurface.get_space" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the space this surface is in.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The space of the surface.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#splinelib.splinelib.TensorProductSplineSpace" title="splinelib.splinelib.TensorProductSplineSpace">TensorProductSplineSpace</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="splinelib.splinelib.SplineSurface.is_parametric">
+<code class="descname">is_parametric</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/splinelib/splinelib.html#SplineSurface.is_parametric"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#splinelib.splinelib.SplineSurface.is_parametric" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns true if the object represents a parametric spline surface.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Whether spline is a parametric surface or not.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="splinelib.splinelib.TensorProductSplineSpace">
+<em class="property">class </em><code class="descclassname">splinelib.splinelib.</code><code class="descname">TensorProductSplineSpace</code><span class="sig-paren">(</span><em>spaces</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/splinelib/splinelib.html#TensorProductSplineSpace"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#splinelib.splinelib.TensorProductSplineSpace" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Class for representing a Tensor product space between two spline spaces.</p>
+<dl class="method">
+<dt id="splinelib.splinelib.TensorProductSplineSpace.create_spline">
+<code class="descname">create_spline</code><span class="sig-paren">(</span><em>coeffs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/splinelib/splinelib.html#TensorProductSplineSpace.create_spline"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#splinelib.splinelib.TensorProductSplineSpace.create_spline" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a spline surface within this spline space with given coefficients</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>coeffs</strong> (<em>np.ndarray</em>) – Coefficient matrix for the spline. If ndim is 2 the
+spline will be non-parametric, if ndim is 3, the spline
+will be parametric.</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A Spline object, representing a spline inside the space</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code> – If the number of coefficients doesn’t match space dimension.</li>
+<li><code class="xref py py-exc docutils literal notranslate"><span class="pre">TypeError</span></code> – If any arg is of the wrong type</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="splinelib.splinelib.TensorProductSplineSpace.get_spaces">
+<code class="descname">get_spaces</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/splinelib/splinelib.html#TensorProductSplineSpace.get_spaces"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#splinelib.splinelib.TensorProductSplineSpace.get_spaces" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns all the spaces this space is a tensor product space of.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Each individual dimension in the tensor product spline
+space.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">List of SplineSpace</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-splinelib">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-splinelib" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="index.html" class="btn btn-neutral" title="Welcome to splinelib’s documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Mathias Lohne.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'0.1',
+            LANGUAGE:'en',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  <script type="text/javascript" src="_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
