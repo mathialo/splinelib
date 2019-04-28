@@ -3,7 +3,7 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to splinelib's documentation!
+The splinelib package
 =====================================
 
 .. toctree::
@@ -11,6 +11,9 @@ Welcome to splinelib's documentation!
    :caption: Contents:
 
    splinelib
+
+
+
 
 
 Indices and tables
